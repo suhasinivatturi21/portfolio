@@ -164,6 +164,24 @@
   }
 }
 
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  /* Slightly smaller base font for compact screens */
+  html { font-size: 15px; }
+
+  /* Reduce section vertical padding for tighter stacking */
+  section[id] { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+
+  /* Reduce large hero heights on small screens */
+  .h-72 { height: 14rem !important; }
+
+  /* Make hover overlays visible on touch devices (so CTA is always accessible) */
+  .group-hover\:opacity-100 { opacity: 1 !important; }
+
+  /* Utility to make buttons full width on mobile */
+  .btn-full-mobile { width: 100%; display: inline-flex; justify-content: center; }
+}
+
 /* Custom cursor */
 @media (pointer: fine) {
   * { cursor: none !important; }

@@ -111,7 +111,7 @@ export function Experience() {
           <h3 className="text-lg font-semibold text-foreground mb-8 flex items-center gap-2">
             <GraduationCap className="w-5 h-5 text-primary" /> Education
           </h3>
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {education.map((edu, i) => (
               <motion.div
                 key={edu.id}
@@ -163,7 +163,7 @@ export function Experience() {
           <h3 className="text-lg font-semibold text-foreground mb-8 flex items-center gap-2">
             <Award className="w-5 h-5 text-primary" /> Certifications
           </h3>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {(() => {
               // merge overrides from localStorage for certifications
               let overrides: Record<string, any> = {}

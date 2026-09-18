@@ -181,31 +181,31 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {/* Footer */}
             <div className="flex items-center justify-between pt-3 border-t border-border/50">
               <div className="flex items-center gap-2.5">
-                {project.github && (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="GitHub"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <GithubIcon className="w-4 h-4" />
-                  </a>
-                )}
-                {project.liveDemo && (
-                  <a
-                    href={project.liveDemo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Live Demo"
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                )}
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="GitHub"
+                        className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-md"
+                      >
+                        <GithubIcon className="w-5 h-5" />
+                      </a>
+                    )}
+                    {project.liveDemo && (
+                      <a
+                        href={project.liveDemo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Live Demo"
+                        className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-md"
+                      >
+                        <ExternalLink className="w-5 h-5" />
+                      </a>
+                    )}
               </div>
-              <button onClick={openCaseStudy} className="text-primary font-medium text-xs">
-                Read case study <ArrowRight className="w-3 h-3 inline-block ml-1" />
+              <button onClick={openCaseStudy} className="text-primary font-medium text-sm w-full sm:w-auto text-center py-2 rounded-md">
+                Read case study <ArrowRight className="w-3 h-3 inline-block ml-2" />
               </button>
             </div>
           </div>
@@ -269,7 +269,7 @@ export function Projects() {
         </div>
 
         {/* Grid */}
-        <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence mode="popLayout">
             {filtered.map((project, i) => (
               <ProjectCard key={project.slug} project={project} index={i} />

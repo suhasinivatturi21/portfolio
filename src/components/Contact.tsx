@@ -44,7 +44,7 @@ export function Contact() {
               rel="noopener noreferrer"
               aria-label={`Compose email to ${profile.email} in Gmail`}
             >
-              <Button size="lg" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg px-8">
+              <Button size="lg" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg px-8 w-full sm:w-auto btn-full-mobile">
                 <Mail className="w-4 h-4 mr-2" /> Contact me
               </Button>
             </a>

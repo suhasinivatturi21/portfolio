@@ -220,7 +220,7 @@ export function EventDiary() {
         </div>
 
         {/* Masonry-ish grid */}
-        <motion.div layout className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           <AnimatePresence mode="popLayout">
             {filtered.map((event, i) => (
               <EventCard

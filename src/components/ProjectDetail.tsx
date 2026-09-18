@@ -34,7 +34,7 @@ export function ProjectDetail() {
         <div className="text-center space-y-4">
           <SushiBot size="lg" mood="thinking" speechBubble="Hmm, I can't find that project..." />
           <h1 className="text-2xl font-bold text-foreground">Project not found</h1>
-          <Link to={{ pathname: "/", state: { scrollTo: "projects" } }}>
+          <Link to="/" state={{ scrollTo: "projects" }}>
             <Button variant="outline" className="rounded-full">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Projects
             </Button>
@@ -89,7 +89,7 @@ export function ProjectDetail() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         {/* Back link */}
-        <Link to={{ pathname: "/", state: { scrollTo: "projects" } }} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6">
+        <Link to="/" state={{ scrollTo: "projects" }} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6">
           <ArrowLeft className="w-4 h-4" /> Back to Projects
         </Link>
 
@@ -105,11 +105,11 @@ export function ProjectDetail() {
 
         {/* Tech stack */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-wrap gap-2 mb-10">
-          {project.technologies.map((tech) => (
-            <span key={tech} className="px-3 py-1 rounded-full text-sm bg-muted text-muted-foreground">
-              {tech}
-            </span>
-          ))}
+          {project.technologies.map((tech: string) => (
+              <span key={tech} className="px-3 py-1 rounded-full text-sm bg-muted text-muted-foreground">
+                {tech}
+              </span>
+            ))}
         </motion.div>
 
         {/* Links */}
@@ -133,7 +133,7 @@ export function ProjectDetail() {
         {/* Gallery thumbnails */}
         {project.images && project.images.length > 0 && (
           <div className="mb-8 grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {project.images.map((src, i) => (
+            {project.images.map((src: string, i: number) => (
               <button
                 key={src}
                 onClick={() => openGallery(i)}
@@ -172,7 +172,7 @@ export function ProjectDetail() {
 
         {/* Bottom nav */}
         <div className="mt-12 pt-8 border-t border-border flex items-center justify-between">
-          <Link to={{ pathname: "/", state: { scrollTo: "projects" } }}>
+          <Link to="/" state={{ scrollTo: "projects" }}>
             <Button variant="outline" className="rounded-full">
               <ArrowLeft className="w-4 h-4 mr-2" /> All Projects
             </Button>

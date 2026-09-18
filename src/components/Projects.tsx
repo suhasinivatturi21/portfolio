@@ -1,12 +1,12 @@
 import { useState, useRef } from "react"
 import { motion, AnimatePresence, useMotionTemplate, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { SectionHeader } from "@/components/SectionHeader"
-import { Button } from "@/components/ui/button"
+// Button is not used in this component
 import { ExternalLink, ArrowRight, FolderGit2, Star } from "lucide-react"
 import { GithubIcon } from "@/components/SocialIcons"
 import { projects, type Project } from "@/data/projects"
 import { useEffect } from "react"
-import { Link, useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import { cn } from "@/lib/utils"
 
 const categories = ["All", "Web", "Data", "AI", "Tools", "Other"] as const

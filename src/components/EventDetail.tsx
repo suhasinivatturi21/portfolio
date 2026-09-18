@@ -104,7 +104,7 @@ export function EventDetail() {
     )
   }
 
-  const catColor = eventCategoryColors[event.category]
+  const catColor = eventCategoryColors[event.category as keyof typeof eventCategoryColors]
   const stats = [
     { icon: Users, label: "Participants", value: event.stats.participants },
     { icon: Users, label: "Team Size", value: event.stats.teamSize },
@@ -179,7 +179,7 @@ export function EventDetail() {
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-4">{event.description}</p>
           <ul className="space-y-2">
-            {event.responsibilities.map((r, i) => (
+            {event.responsibilities.map((r: string, i: number) => (
               <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                 <span className="text-primary mt-1">♡</span> {r}
               </li>
@@ -205,7 +205,7 @@ export function EventDetail() {
           <h2 className="text-lg font-semibold text-foreground mb-6">Timeline</h2>
           <div className="relative pl-6">
             <div className="absolute left-2 top-2 bottom-2 w-px bg-border" />
-            {event.timeline.map((item, i) => (
+            {event.timeline.map((item: any, i: number) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, x: -10 }}
@@ -230,7 +230,7 @@ export function EventDetail() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-8">
             <h2 className="text-lg font-semibold text-foreground mb-4">Gallery</h2>
             <div className="columns-2 sm:columns-3 gap-3 [&>*]:mb-3">
-              {event.gallery.map((img, i) => (
+              {event.gallery.map((img: any, i: number) => (
                 <button
                   key={i}
                   onClick={() => setLightboxIndex(i)}
@@ -252,7 +252,7 @@ export function EventDetail() {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-12">
           <h2 className="text-lg font-semibold text-foreground mb-4">Reflections</h2>
           <div className="grid sm:grid-cols-2 gap-4">
-            {reflections.map((ref, i) => {
+            {reflections.map((ref, i: number) => {
               const Icon = ref.icon
               return (
                 <div key={i} className="bg-card border border-border rounded-xl p-5 shadow-sm">
@@ -271,7 +271,7 @@ export function EventDetail() {
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-8">
-          {event.tags.map((tag) => (
+          {event.tags.map((tag: string) => (
             <Badge key={tag} variant="secondary" className="rounded-full">{tag}</Badge>
           ))}
         </div>

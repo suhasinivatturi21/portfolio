@@ -1,7 +1,6 @@
 import { motion } from "framer-motion"
-import { ExternalLink, ArrowRight } from "lucide-react"
+import { ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import type { Project } from "@/data/projects"
 import { GithubIcon } from "@/components/SocialIcons"
 

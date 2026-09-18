@@ -1,0 +1,20 @@
+export const profile = {
+  name: "Suhasini Vatturi",
+  nickname: "Suhasini",
+  tagline: "Data Scientist in the making. Event planner by passion.",
+  subTagline: "Turning data into insights and ideas into experiences.",
+  bio: "I'm Suhasini — a curious mind at the intersection of data and creativity. I love diving into datasets as much as I love orchestrating unforgettable events. Whether I'm building a machine learning model or coordinating a campus festival, I bring the same energy: detail-oriented, people-first, and always learning.",
+  location: "[City, State]",
+  university: "[University Name]",
+  email: "suhasini@example.com",
+  linkedin: "https://linkedin.com/in/suhasinivatturi",
+  github: "https://github.com/suhasinivatturi",
+  instagram: "#",
+  avatar: null,
+  stats: {
+    events: 12,
+    people: 500,
+    projects: 8,
+    certificates: 5,
+  },
+}

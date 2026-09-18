@@ -6,6 +6,7 @@ import { ArrowLeft, ExternalLink, Target, Lightbulb, Database, TrendingUp, BookO
 import { GithubIcon } from "@/components/SocialIcons"
 import { projects } from "@/data/projects"
 import { SushiBot } from "@/components/SushiBot"
+import { useEffect, useState } from "react"
 
 const sectionIcons = {
   problem: Target,
@@ -17,7 +18,15 @@ const sectionIcons = {
 
 export function ProjectDetail() {
   const { slug } = useParams()
-  const project = projects.find((p) => p.slug === slug)
+  const rawProject = projects.find((p) => p.slug === slug)
+  const overrides = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("portfolio_overrides") || "{}")
+    } catch (e) {
+      return {}
+    }
+  })()
+  const project = rawProject ? { ...rawProject, ...(overrides[rawProject.slug] || {}) } : undefined
 
   if (!project) {
     return (
@@ -25,7 +34,7 @@ export function ProjectDetail() {
         <div className="text-center space-y-4">
           <SushiBot size="lg" mood="thinking" speechBubble="Hmm, I can't find that project..." />
           <h1 className="text-2xl font-bold text-foreground">Project not found</h1>
-          <Link to="/#projects">
+          <Link to={{ pathname: "/", state: { scrollTo: "projects" } }}>
             <Button variant="outline" className="rounded-full">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Projects
             </Button>
@@ -42,6 +51,28 @@ export function ProjectDetail() {
     { key: "results", label: "Results", icon: sectionIcons.results, content: project.results },
     { key: "learnings", label: "What I Learned", icon: sectionIcons.learnings, content: project.learnings },
   ]
+  // ensure we start at the top to avoid unexpected scroll positions
+  useEffect(() => {
+    try {
+      window.scrollTo({ top: 0 })
+    } catch (e) {
+      // ignore
+    }
+  }, [])
+
+  const [galleryIndex, setGalleryIndex] = useState<number | null>(null)
+  const openGallery = (i: number) => setGalleryIndex(i)
+  const closeGallery = () => setGalleryIndex(null)
+  const nextImage = () => {
+    if (project.images && galleryIndex !== null) {
+      setGalleryIndex((galleryIndex + 1) % project.images.length)
+    }
+  }
+  const prevImage = () => {
+    if (project.images && galleryIndex !== null) {
+      setGalleryIndex((galleryIndex - 1 + project.images.length) % project.images.length)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background pt-20">
@@ -58,7 +89,7 @@ export function ProjectDetail() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
         {/* Back link */}
-        <Link to="/#projects" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6">
+        <Link to={{ pathname: "/", state: { scrollTo: "projects" } }} className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6">
           <ArrowLeft className="w-4 h-4" /> Back to Projects
         </Link>
 
@@ -99,6 +130,21 @@ export function ProjectDetail() {
           )}
         </div>
 
+        {/* Gallery thumbnails */}
+        {project.images && project.images.length > 0 && (
+          <div className="mb-8 grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {project.images.map((src, i) => (
+              <button
+                key={src}
+                onClick={() => openGallery(i)}
+                className="rounded-xl overflow-hidden bg-card border border-border hover:scale-105 transform transition-transform"
+              >
+                <img src={src} alt={`${project.title} ${i + 1}`} className="w-full h-36 object-cover" />
+              </button>
+            ))}
+          </div>
+        )}
+
         {/* Detail sections */}
         <div className="space-y-8">
           {sections.map((section, i) => {
@@ -126,7 +172,7 @@ export function ProjectDetail() {
 
         {/* Bottom nav */}
         <div className="mt-12 pt-8 border-t border-border flex items-center justify-between">
-          <Link to="/#projects">
+          <Link to={{ pathname: "/", state: { scrollTo: "projects" } }}>
             <Button variant="outline" className="rounded-full">
               <ArrowLeft className="w-4 h-4 mr-2" /> All Projects
             </Button>
@@ -134,6 +180,17 @@ export function ProjectDetail() {
           <SushiBot size="sm" mood="idle" />
         </div>
       </div>
+      {/* Lightbox modal */}
+      {galleryIndex !== null && project.images && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="relative max-w-4xl w-full mx-4">
+            <button onClick={closeGallery} className="absolute top-3 right-3 text-white bg-black/40 p-2 rounded-full">✕</button>
+            <button onClick={prevImage} className="absolute left-3 top-1/2 -translate-y-1/2 text-white bg-black/40 p-2 rounded-full">‹</button>
+            <img src={project.images[galleryIndex]} alt={`Large ${galleryIndex + 1}`} className="w-full h-[60vh] object-contain rounded-lg" />
+            <button onClick={nextImage} className="absolute right-3 top-1/2 -translate-y-1/2 text-white bg-black/40 p-2 rounded-full">›</button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

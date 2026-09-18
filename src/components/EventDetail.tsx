@@ -76,7 +76,16 @@ function Lightbox({ images, index, onClose, onPrev, onNext }: {
 
 export function EventDetail() {
   const { slug } = useParams()
-  const event = events.find((e) => e.slug === slug)
+  const rawEvent = events.find((e) => e.slug === slug)
+  const overrides = (() => {
+    try {
+      const o = JSON.parse(localStorage.getItem("portfolio_overrides") || "{}")
+      return o[`event:${slug}`] || {}
+    } catch (e) {
+      return {}
+    }
+  })()
+  const event = rawEvent ? { ...rawEvent, ...overrides } : undefined
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   if (!event) {
@@ -113,14 +122,19 @@ export function EventDetail() {
   return (
     <div className="min-h-screen bg-background pt-20">
       {/* Cover */}
-      <div className="relative h-72 sm:h-96 bg-gradient-to-br from-pink-blush/40 to-lavender/30 overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pink opacity-30" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center opacity-50">
-            <div className="text-5xl mb-2">📷</div>
-            <div className="text-sm font-medium text-muted-foreground">[Event Cover Photo]</div>
-          </div>
-        </div>
+      <div className="relative h-72 sm:h-96 overflow-hidden" style={event.coverImage ? { backgroundImage: `url(${event.coverImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}>
+        {!event.coverImage && (
+          <>
+            <div className="absolute inset-0 bg-gradient-to-br from-pink-blush/40 to-lavender/30" />
+            <div className="absolute inset-0 bg-grid-pink opacity-30" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center opacity-50">
+                <div className="text-5xl mb-2">📷</div>
+                <div className="text-sm font-medium text-muted-foreground">[Event Cover Photo]</div>
+              </div>
+            </div>
+          </>
+        )}
         <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-foreground/60 to-transparent">
           <div className="max-w-4xl mx-auto">
             <span className="px-3 py-1 rounded-full text-xs font-medium text-white mb-3 inline-block" style={{ backgroundColor: catColor }}>

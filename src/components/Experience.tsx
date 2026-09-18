@@ -61,32 +61,41 @@ export function Experience() {
                       style={{ backgroundColor: typeColor }}
                     />
                   )}
-                  <TiltCard className="p-5" tiltStrength={4} glowColor={`${typeColor}15`}>
-                    <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <h4 className="font-semibold text-foreground">{exp.role}</h4>
-                          <span
-                            className="px-2 py-0.5 rounded-full text-xs font-medium text-white"
-                            style={{ backgroundColor: typeColor + "cc" }}
-                          >
-                            {exp.type}
-                          </span>
+                  <TiltCard className="p-6 relative transform-gpu transition-transform duration-300 hover:-translate-y-1" tiltStrength={4} glowColor={`${typeColor}18`}>
+                    <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style={{ background: `linear-gradient(180deg, ${typeColor}, transparent)` }} />
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div className="flex items-start gap-3">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/6 to-primary/2 flex items-center justify-center text-xl font-semibold text-primary shrink-0 border border-border">
+                            {exp.organization?.[0] ?? "★"}
+                          </div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="font-semibold text-foreground">{exp.role}</h4>
+                            <span
+                              className="px-2 py-0.5 rounded-full text-xs font-medium text-white"
+                              style={{ backgroundColor: typeColor + "cc" }}
+                            >
+                              {exp.type}
+                            </span>
+                          </div>
+                          <p className="text-sm text-foreground font-medium">{exp.organization}</p>
+                          <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                            <MapPin className="w-3 h-3" /> {exp.location}
+                          </p>
                         </div>
-                        <p className="text-sm text-primary font-medium">{exp.organization}</p>
-                        <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                          <MapPin className="w-3 h-3" /> {exp.location}
-                        </p>
                       </div>
-                      <Badge variant="outline" className="text-xs shrink-0">
-                        {exp.startDate} — {exp.endDate}
-                      </Badge>
+                      <div className="text-right">
+                        <Badge variant="outline" className="text-xs shrink-0">
+                          {exp.startDate} — {exp.endDate}
+                        </Badge>
+                      </div>
                     </div>
                     <p className="text-sm text-muted-foreground mb-3 leading-relaxed">{exp.description}</p>
-                    <ul className="space-y-1.5">
+                    <ul className="space-y-2 mt-3">
                       {exp.highlights.map((h, j) => (
-                        <li key={j} className="flex items-start gap-2 text-sm text-muted-foreground">
-                          <span className="text-primary mt-0.5 shrink-0">♡</span> {h}
+                        <li key={j} className="flex items-start gap-3 text-sm text-muted-foreground">
+                          <span className="text-primary mt-0.5 shrink-0">•</span>
+                          <span className="leading-relaxed">{h}</span>
                         </li>
                       ))}
                     </ul>
@@ -111,15 +120,16 @@ export function Experience() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <TiltCard className="p-6 h-full" tiltStrength={5} glowColor="oklch(0.65 0.18 0 / 0.12)">
+                <TiltCard className="p-6 h-full relative overflow-hidden transform-gpu transition-transform duration-300 hover:-translate-y-1" tiltStrength={5} glowColor="oklch(0.65 0.18 0 / 0.12)">
+                  <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl bg-gradient-to-b from-primary/60 to-transparent" />
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-start gap-3">
-                      <div className="p-2.5 rounded-xl bg-primary/10 shrink-0">
-                        <GraduationCap className="w-5 h-5 text-primary" />
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/6 to-primary/2 flex items-center justify-center shrink-0 text-primary font-semibold text-lg border border-border">
+                        <GraduationCap className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-foreground">{edu.institution}</h4>
-                        <p className="text-sm text-primary">{edu.degree} in {edu.field}</p>
+                        <h4 className="font-semibold text-foreground text-lg">{edu.institution}</h4>
+                        <p className="text-sm text-foreground/80">{edu.degree} in {edu.field}</p>
                       </div>
                     </div>
                     <Badge variant="outline" className="text-xs shrink-0">
@@ -134,9 +144,9 @@ export function Experience() {
                     <p className="text-xs font-medium text-foreground mb-2 flex items-center gap-1">
                       <Sparkles className="w-3 h-3 text-primary" /> Relevant Coursework
                     </p>
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-2 mt-2">
                       {edu.relevantCourses.map((course) => (
-                        <span key={course} className="text-xs px-2.5 py-1 rounded-full bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors cursor-default">
+                        <span key={course} className="text-xs px-3 py-1 rounded-full bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors cursor-default">
                           {course}
                         </span>
                       ))}
@@ -154,53 +164,71 @@ export function Experience() {
             <Award className="w-5 h-5 text-primary" /> Certifications
           </h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {certifications.map((cert, i) => {
-              const catColor = certColors[cert.category] || "oklch(0.62 0.17 0)"
-              return (
-                <motion.div
-                  key={cert.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                >
-                  <TiltCard className="p-5 h-full" tiltStrength={6} glowColor={`${catColor}18`} dataCursor="View">
-                    {/* Top accent line */}
-                    <div
-                      className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"
-                      style={{ background: `linear-gradient(90deg, ${catColor}, transparent)` }}
-                    />
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="p-2 rounded-xl" style={{ backgroundColor: catColor + "15" }}>
-                        <Award className="w-4 h-4" style={{ color: catColor }} />
+            {(() => {
+              // merge overrides from localStorage for certifications
+              let overrides: Record<string, any> = {}
+              try {
+                const o = JSON.parse(localStorage.getItem("portfolio_overrides") || "{}")
+                Object.entries(o).forEach(([k, v]) => {
+                  const parts = k.split(":")
+                  if (parts[0] === "cert") overrides[parts[1]] = v
+                })
+              } catch (e) {
+                overrides = {}
+              }
+              return certifications.map((cert, i) => {
+                const merged = { ...cert, ...(overrides[cert.id] || {}) }
+                const certItem = merged
+                const catColor = certColors[certItem.category] || "oklch(0.62 0.17 0)"
+                return (
+                  <motion.div
+                    key={certItem.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08 }}
+                  >
+                    <TiltCard className="p-5 h-full" tiltStrength={6} glowColor={`${catColor}18`} dataCursor="View">
+                      {/* Top accent line */}
+                      <div
+                        className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"
+                        style={{ background: `linear-gradient(90deg, ${catColor}, transparent)` }}
+                      />
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="p-2 rounded-xl flex items-center justify-center" style={{ backgroundColor: catColor + "15" }}>
+                          <Award className="w-4 h-4" style={{ color: catColor }} />
+                        </div>
+                        <span
+                          className="px-2 py-0.5 rounded-full text-xs font-medium text-white"
+                          style={{ backgroundColor: catColor + "cc" }}
+                        >
+                          {certItem.category}
+                        </span>
                       </div>
-                      <span
-                        className="px-2 py-0.5 rounded-full text-xs font-medium text-white"
-                        style={{ backgroundColor: catColor + "cc" }}
-                      >
-                        {cert.category}
-                      </span>
-                    </div>
-                    <h4 className="font-semibold text-foreground text-sm leading-tight mb-1">{cert.title}</h4>
-                    <p className="text-xs text-muted-foreground">{cert.organization}</p>
-                    <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-                      <Sparkles className="w-3 h-3" /> {cert.date}
-                    </p>
-                    <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{cert.description}</p>
-                    {cert.credentialUrl && (
-                      <a
-                        href={cert.credentialUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs text-primary mt-3 hover:underline font-medium"
-                      >
-                        View Credential <ExternalLink className="w-3 h-3" />
-                      </a>
-                    )}
-                  </TiltCard>
-                </motion.div>
-              )
-            })}
+                      {certItem.image && (
+                        <img src={certItem.image} alt={certItem.title} className="w-16 h-12 object-cover rounded-md absolute top-4 right-4 shadow-sm" />
+                      )}
+                      <h4 className="font-semibold text-foreground text-sm leading-tight mb-1">{certItem.title}</h4>
+                      <p className="text-xs text-muted-foreground">{certItem.organization}</p>
+                      <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                        <Sparkles className="w-3 h-3" /> {certItem.date}
+                      </p>
+                      <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{certItem.description}</p>
+                      {certItem.credentialUrl && (
+                        <a
+                          href={certItem.credentialUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-xs text-primary mt-3 hover:underline font-medium"
+                        >
+                          View Credential <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
+                    </TiltCard>
+                  </motion.div>
+                )
+              })
+            })()}
           </div>
         </div>
       </div>

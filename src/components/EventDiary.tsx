@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { SectionHeader } from "@/components/SectionHeader"
 import { events, type Event, type EventCategory, eventCategoryColors } from "@/data/events"
@@ -170,7 +170,24 @@ function EventCard({ event, layout, index }: { event: Event; layout: string; ind
 
 export function EventDiary() {
   const [filter, setFilter] = useState<(typeof filters)[number]>("All")
-  const filtered = filter === "All" ? events : events.filter((e) => e.category === filter)
+  const [overrides, setOverrides] = useState<Record<string, any>>({})
+
+  useEffect(() => {
+    try {
+      const o = JSON.parse(localStorage.getItem("portfolio_overrides") || "{}")
+      const evOverrides: Record<string, any> = {}
+      Object.entries(o).forEach(([k, v]) => {
+        const parts = k.split(":")
+        if (parts[0] === "event") evOverrides[parts[1]] = v
+      })
+      setOverrides(evOverrides)
+    } catch (e) {
+      setOverrides({})
+    }
+  }, [])
+
+  const merged = events.map((ev) => ({ ...ev, ...(overrides[ev.slug] || {}) }))
+  const filtered = filter === "All" ? merged : merged.filter((e) => e.category === filter)
 
   return (
     <section id="events" className="py-24 bg-background relative overflow-hidden">

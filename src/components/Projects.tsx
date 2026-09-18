@@ -5,17 +5,18 @@ import { Button } from "@/components/ui/button"
 import { ExternalLink, ArrowRight, FolderGit2, Star } from "lucide-react"
 import { GithubIcon } from "@/components/SocialIcons"
 import { projects, type Project } from "@/data/projects"
-import { Link } from "react-router-dom"
+import { useEffect } from "react"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { cn } from "@/lib/utils"
 
-const categories = ["All", "Data Science", "Machine Learning", "AI", "Analytics", "Other"] as const
+const categories = ["All", "Web", "Data", "AI", "Tools", "Other"] as const
 
 const categoryColors: Record<string, string> = {
-  "Data Science": "oklch(0.65 0.18 0)",
-  "Machine Learning": "oklch(0.7 0.12 290)",
-  "AI": "oklch(0.72 0.14 340)",
-  "Analytics": "oklch(0.68 0.15 200)",
-  "Other": "oklch(0.6 0.08 0)",
+  Web: "oklch(0.65 0.18 0)",
+  Data: "oklch(0.7 0.12 290)",
+  AI: "oklch(0.72 0.14 340)",
+  Tools: "oklch(0.68 0.15 200)",
+  Other: "oklch(0.6 0.08 0)",
 }
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
@@ -48,6 +49,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     mouseY.set(0.5)
   }
 
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const openCaseStudy = (e?: React.MouseEvent) => {
+    e?.preventDefault()
+    navigate(`/projects/${project.slug}`, { state: { background: location } })
+  }
+
   return (
     <motion.div
       layout
@@ -56,7 +65,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
     >
-      <Link to={`/projects/${project.slug}`} data-cursor="View">
+      <div
+        role="link"
+        tabIndex={0}
+        onClick={openCaseStudy}
+        onKeyDown={(e) => { if (e.key === 'Enter') openCaseStudy() }}
+        data-cursor="View"
+      >
         <motion.div
           ref={ref}
           onMouseMove={handleMouseMove}
@@ -167,38 +182,60 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             <div className="flex items-center justify-between pt-3 border-t border-border/50">
               <div className="flex items-center gap-2.5">
                 {project.github && (
-                  <span
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                    onClick={(e) => e.preventDefault()}
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     title="GitHub"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <GithubIcon className="w-4 h-4" />
-                  </span>
+                  </a>
                 )}
                 {project.liveDemo && (
-                  <span
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                    onClick={(e) => e.preventDefault()}
+                  <a
+                    href={project.liveDemo}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     title="Live Demo"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <ExternalLink className="w-4 h-4" />
-                  </span>
+                  </a>
                 )}
               </div>
-              <Button variant="ghost" size="xs" className="text-primary font-medium">
-                Read case study <ArrowRight className="w-3 h-3" />
-              </Button>
+              <button onClick={openCaseStudy} className="text-primary font-medium text-xs">
+                Read case study <ArrowRight className="w-3 h-3 inline-block ml-1" />
+              </button>
             </div>
           </div>
         </motion.div>
-      </Link>
+      </div>
     </motion.div>
   )
 }
 
 export function Projects() {
   const [filter, setFilter] = useState<(typeof categories)[number]>("All")
-  const filtered = filter === "All" ? projects : projects.filter((p) => p.category === filter)
+  const [overrides, setOverrides] = useState<Record<string, any>>({})
+
+  useEffect(() => {
+    try {
+      const o = JSON.parse(localStorage.getItem("portfolio_overrides") || "{}")
+      // transforms composite keys 'project:slug' to map by slug
+      const projOverrides: Record<string, any> = {}
+      Object.entries(o).forEach(([k, v]) => {
+        const parts = k.split(":")
+        if (parts[0] === "project") projOverrides[parts[1]] = v
+      })
+      setOverrides(projOverrides)
+    } catch (e) {
+      setOverrides({})
+    }
+  }, [])
+
+  const mergedProjects = projects.map((p) => ({ ...p, ...(overrides[p.slug] || {}) }))
+  const filtered = filter === "All" ? mergedProjects : mergedProjects.filter((p) => p.category === filter)
 
   return (
     <section id="projects" className="py-24 bg-muted/30 relative overflow-hidden">
@@ -209,7 +246,7 @@ export function Projects() {
         <SectionHeader
           label="Portfolio"
           title="Projects I've Built"
-          subtitle="A collection of data science experiments, ML models, and analytics projects."
+          subtitle="A selection of web, data, and AI projects — case studies and demos."
           decorative="🚀"
         />
 

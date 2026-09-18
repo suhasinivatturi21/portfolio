@@ -30,18 +30,25 @@ export function Contact() {
           <SushiBot size="lg" mood="waving" speechBubble="Should we make something awesome? ✨" />
         </motion.div>
 
-        {/* CTA Button */}
+        {/* CTA Button: Open Gmail compose (only 'to' field) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-10"
         >
-          <a href={`mailto:${profile.email}`}>
-            <Button size="lg" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg px-8">
-              <Mail className="w-4 h-4 mr-2" /> Let's Talk
-            </Button>
-          </a>
+          <div className="flex items-center justify-center">
+            <a
+              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(profile.email)}&tf=1`}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Compose email to ${profile.email} in Gmail`}
+            >
+              <Button size="lg" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg px-8">
+                <Mail className="w-4 h-4 mr-2" /> Contact me
+              </Button>
+            </a>
+          </div>
         </motion.div>
 
         {/* Social links */}
